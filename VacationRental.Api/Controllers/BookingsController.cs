@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using VacationRental.Api.Models;
+using VacationRental.Application;
 
 namespace VacationRental.Api.Controllers
 {
@@ -9,14 +11,14 @@ namespace VacationRental.Api.Controllers
     [ApiController]
     public class BookingsController : ControllerBase
     {
-        private readonly IDictionary<int, RentalViewModel> _rentals;
+        private readonly IRentalService _rentalService;
         private readonly IDictionary<int, BookingViewModel> _bookings;
 
         public BookingsController(
-            IDictionary<int, RentalViewModel> rentals,
+            IRentalService rentalService,
             IDictionary<int, BookingViewModel> bookings)
         {
-            _rentals = rentals;
+            _rentalService = rentalService;
             _bookings = bookings;
         }
 
@@ -31,19 +33,19 @@ namespace VacationRental.Api.Controllers
         }
 
         [HttpPost]
-        public ResourceIdViewModel Post(BookingBindingModel model)
+        public async Task<ResourceIdViewModel> Post(BookingBindingModel model)
         {
             if (model.Nights <= 0)
                 throw new ApplicationException("Nigts must be positive");
-            if (!_rentals.ContainsKey(model.RentalId))
-                throw new ApplicationException("Rental not found");
+
+            var rental = await _rentalService.GetRental(new GetRentalQuery(model.RentalId));
 
             for (var i = 0; i < model.Nights; i++)
             {
                 var count = 0;
                 foreach (var booking in _bookings.Values)
                 {
-                    if (booking.RentalId == model.RentalId
+                    if (booking.RentalId == rental.Id
                         && (booking.Start <= model.Start.Date && booking.Start.AddDays(booking.Nights) > model.Start.Date)
                         || (booking.Start < model.Start.AddDays(model.Nights) && booking.Start.AddDays(booking.Nights) >= model.Start.AddDays(model.Nights))
                         || (booking.Start > model.Start && booking.Start.AddDays(booking.Nights) < model.Start.AddDays(model.Nights)))
@@ -51,7 +53,7 @@ namespace VacationRental.Api.Controllers
                         count++;
                     }
                 }
-                if (count >= _rentals[model.RentalId].Units)
+                if (count >= rental.Units)
                     throw new ApplicationException("Not available");
             }
 
@@ -62,7 +64,7 @@ namespace VacationRental.Api.Controllers
             {
                 Id = key.Id,
                 Nights = model.Nights,
-                RentalId = model.RentalId,
+                RentalId = rental.Id,
                 Start = model.Start.Date
             });
 
