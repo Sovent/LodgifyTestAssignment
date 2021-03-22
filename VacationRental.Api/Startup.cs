@@ -41,7 +41,9 @@ namespace VacationRental.Api
 
             services.AddSingleton<IRentalRepository, InMemoryRentalRepository>();
             services.AddSingleton<IRentalService, RentalService>();
-            services.AddSingleton<IDictionary<int, BookingViewModel>>(new Dictionary<int, BookingViewModel>());
+            services.AddSingleton<IUnitOccupationRepository, InMemoryUnitOccupationRepository>();
+            services.AddSingleton<IRentalAvailabilityCalculator, RentalAvailabilityCalculator>();
+            services.AddSingleton<IBookingService, BookingService>();
 
             services.AddAutoMapper(
                 configuration =>

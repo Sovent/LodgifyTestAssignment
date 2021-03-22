@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VacationRental.Api.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacationRental", "VacationRental\VacationRental.csproj", "{6E032E92-7EB2-4F7C-BA00-AA81F5630606}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacationRental.UnitTests", "VacationRental.UnitTests\VacationRental.UnitTests.csproj", "{C5E74E4A-86CD-47DD-880E-B9ADC1C4E554}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6E032E92-7EB2-4F7C-BA00-AA81F5630606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E032E92-7EB2-4F7C-BA00-AA81F5630606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E032E92-7EB2-4F7C-BA00-AA81F5630606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5E74E4A-86CD-47DD-880E-B9ADC1C4E554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E74E4A-86CD-47DD-880E-B9ADC1C4E554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5E74E4A-86CD-47DD-880E-B9ADC1C4E554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5E74E4A-86CD-47DD-880E-B9ADC1C4E554}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

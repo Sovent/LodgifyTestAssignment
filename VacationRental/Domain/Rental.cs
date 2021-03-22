@@ -1,6 +1,8 @@
+using VacationRental.Common;
+
 namespace VacationRental.Domain
 {
-    public class Rental
+    public class Rental : IEntity
     {
         public Rental(int units)
         {

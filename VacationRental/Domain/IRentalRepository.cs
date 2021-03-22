@@ -4,8 +4,8 @@ namespace VacationRental.Domain
 {
     public interface IRentalRepository
     {
-        Task<Rental> GetById(int id);
+        Rental GetById(int id);
 
-        Task Save(Rental rental);
+        void Save(Rental rental);
     }
 }

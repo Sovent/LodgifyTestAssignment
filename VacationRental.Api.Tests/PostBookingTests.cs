@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VacationRental.Api.Models;
+using VacationRental.Common;
+using VacationRental.Domain;
 using Xunit;
 
 namespace VacationRental.Api.Tests
@@ -91,9 +93,9 @@ namespace VacationRental.Api.Tests
                 Start = new DateTime(2002, 01, 02)
             };
 
-            await Assert.ThrowsAsync<ApplicationException>(async () =>
+            await Assert.ThrowsAsync<DomainException<RentalIsUnavailable>>(async () =>
             {
-                using (var postBooking2Response = await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking2Request))
+                using (await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking2Request))
                 {
                 }
             });

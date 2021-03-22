@@ -7,34 +7,22 @@ using VacationRental.Domain;
 
 namespace VacationRental.Infrastructure
 {
-    public class InMemoryRentalRepository : IRentalRepository
+    public class InMemoryRentalRepository : InMemoryRepository<Rental>, IRentalRepository
     {
-        public Task<Rental> GetById(int id)
+        public Rental GetById(int id)
         {
-            var rental =  _rentals.GetValueOrDefault(id);
+            var rental = TryGetById(id);
             if (rental == default)
             {
                 throw new RentalNotFound(id).ToException();
             }
 
-            return Task.FromResult(rental);
+            return rental;
         }
 
-        // note: int id means sequential id generation typical for relational databases
-        public Task Save(Rental rental)
+        void IRentalRepository.Save(Rental rental)
         {
-            lock (_lock)
-            {
-                var newId = _rentals.Any() ? _rentals.Keys.Max() + 1 : 1;
-                _rentals[newId] = rental;
-                _rentalIdProperty.SetValue(rental, newId);
-                return Task.CompletedTask;
-            }
+            base.Save(rental);
         }
-
-        private readonly PropertyInfo _rentalIdProperty =
-            typeof(Rental).GetProperty(nameof(Rental.Id));
-        private readonly Dictionary<int, Rental> _rentals = new Dictionary<int, Rental>();
-        private readonly object _lock = new object();
     }
 }

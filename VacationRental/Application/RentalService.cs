@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using VacationRental.Domain;
 
 namespace VacationRental.Application
@@ -10,17 +9,17 @@ namespace VacationRental.Application
             _rentalRepository = rentalRepository;
         }
         
-        public async Task<int> CreateRental(CreateRentalCommand command)
+        public int CreateRental(CreateRentalCommand command)
         {
             var rental = new Rental(command.Units);
-            await _rentalRepository.Save(rental);
+            _rentalRepository.Save(rental);
 
             return rental.Id;
         }
 
-        public async Task<Rental> GetRental(GetRentalQuery query)
+        public Rental GetRental(GetRentalQuery query)
         {
-            return await _rentalRepository.GetById(query.Id);
+            return _rentalRepository.GetById(query.Id);
         }
         
         private readonly IRentalRepository _rentalRepository;
