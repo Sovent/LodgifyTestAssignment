@@ -1,4 +1,3 @@
-using System;
 using FluentValidation;
 using NodaTime;
 using VacationRental.Common;

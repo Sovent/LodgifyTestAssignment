@@ -1,19 +1,17 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using NodaTime;
 
 namespace VacationRental.Domain
 {
     public interface IRentalAvailabilityCalculator
     {
-        void CheckAvailability(
+        IReadOnlyCollection<int> GetAvailableUnitNumbers(
             Rental rental,
             IEnumerable<UnitOccupation> rentalOccupations,
             LocalDate startDate,
             int nights);
 
-        IReadOnlyDictionary<LocalDate, IEnumerable<UnitOccupation>> GetOccupationSchedule(
+        IReadOnlyDictionary<LocalDate, IEnumerable<UnitOccupation>> GetOccupationCalendar(
             IEnumerable<UnitOccupation> rentalOccupations,
             LocalDate startDate,
             LocalDate endDate);

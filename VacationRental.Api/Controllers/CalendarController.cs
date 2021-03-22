@@ -31,8 +31,18 @@ namespace VacationRental.Api.Controllers
                 Date = date.ToDateTimeUnspecified(),
                 Bookings = calendar[date]
                     .OfType<Booking>()
-                    .Select(booking => new CalendarBookingViewModel {Id = booking.Id})
-                    .ToList()
+                    .Select(booking => new CalendarBookingViewModel
+                    {
+                        Id = booking.Id,
+                        Unit = booking.UnitNumber
+                    })
+                    .ToList(),
+                PreparationTimes = calendar[date]
+                    .OfType<Preparation>()
+                    .Select(preparation => new CalendarPreparationViewModel()
+                    {
+                        Unit = preparation.UnitNumber
+                    }).ToList()
             }).ToList();
 
             return new CalendarViewModel()

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using VacationRental.Api.Filters;
-using VacationRental.Api.Models;
 using VacationRental.Application;
 using VacationRental.Domain;
 using VacationRental.Infrastructure;
@@ -44,12 +41,9 @@ namespace VacationRental.Api
             services.AddSingleton<IUnitOccupationRepository, InMemoryUnitOccupationRepository>();
             services.AddSingleton<IRentalAvailabilityCalculator, RentalAvailabilityCalculator>();
             services.AddSingleton<IBookingService, BookingService>();
+            services.AddSingleton<IPreparationScheduler, PreparationScheduler>();
 
-            services.AddAutoMapper(
-                configuration =>
-                {
-                },
-                typeof(ModelMappingProfile));
+            services.AddAutoMapper(configuration => { }, typeof(ModelMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

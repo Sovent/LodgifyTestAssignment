@@ -7,10 +7,11 @@ namespace VacationRental.Domain
 {
     public abstract class UnitOccupation : IEntity
     {
-        protected UnitOccupation(int rentalId, LocalDate startDate, int nights)
+        protected UnitOccupation(int rentalId, LocalDate startDate, int nights, int unitNumber)
         {
             StartDate = startDate;
             Nights = nights;
+            UnitNumber = unitNumber;
             RentalId = rentalId;
         }
 
@@ -18,6 +19,7 @@ namespace VacationRental.Domain
         
         public int RentalId { get; }
         
+        public int UnitNumber { get; }
         public LocalDate StartDate { get; }
         
         public int Nights { get; }

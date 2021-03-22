@@ -10,7 +10,10 @@ namespace VacationRental.Api
     {
         public ModelMappingProfile()
         {
-            CreateMap<RentalBindingModel, CreateRentalCommand>();
+            CreateMap<RentalBindingModel, CreateRentalCommand>()
+                .ForCtorParam(
+                    "preparationPeriod",
+                    options => options.MapFrom(model => Period.FromDays(model.PreparationTimeInDays)));
             CreateMap<Rental, RentalViewModel>();
             CreateMap<BookingBindingModel, PlaceBookingCommand>()
                 .ForCtorParam(
@@ -19,7 +22,10 @@ namespace VacationRental.Api
             CreateMap<Booking, BookingViewModel>()
                 .ForMember(
                     model => model.Start,
-                    options => options.MapFrom(entity => entity.StartDate.ToDateTimeUnspecified()));
+                    options => options.MapFrom(entity => entity.StartDate.ToDateTimeUnspecified()))
+                .ForMember(
+                    model => model.Unit, 
+                    options => options.MapFrom(entity => entity.UnitNumber));
         }
     }
 }

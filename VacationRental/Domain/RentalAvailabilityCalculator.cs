@@ -7,22 +7,21 @@ namespace VacationRental.Domain
 {
     public class RentalAvailabilityCalculator : IRentalAvailabilityCalculator
     {
-        public void CheckAvailability(
+        public IReadOnlyCollection<int> GetAvailableUnitNumbers(
             Rental rental,
             IEnumerable<UnitOccupation> rentalOccupations,
             LocalDate startDate,
             int nights)
         {
-            var endDate = startDate.LastDayAfterSpentNights(nights);
-            var occupationSchedule = GetOccupationSchedule(rentalOccupations, startDate, endDate);
-            var maxUnitsOccupied = occupationSchedule.Max(occupationsByDay => occupationsByDay.Value.Count());
-            if (maxUnitsOccupied >= rental.Units)
-            {
-                throw new RentalIsUnavailable(rental.Id, startDate, nights).ToException();
-            }
+            var endDate = startDate.LastDayAfterSpentNights(nights + rental.PreparationPeriod.Days);
+            var occupationCalendar = GetOccupationCalendar(rentalOccupations, startDate, endDate);
+            var occupiedUnitsDuringThePeriod =
+                occupationCalendar.Values.Flatten().Select(occupation => occupation.UnitNumber);
+            var unitsToCheckAvailabilityFor = Enumerable.Range(1, rental.Units);
+            return unitsToCheckAvailabilityFor.Except(occupiedUnitsDuringThePeriod).ToArray();
         }
 
-        public IReadOnlyDictionary<LocalDate, IEnumerable<UnitOccupation>> GetOccupationSchedule(
+        public IReadOnlyDictionary<LocalDate, IEnumerable<UnitOccupation>> GetOccupationCalendar(
             IEnumerable<UnitOccupation> rentalOccupations,
             LocalDate startDate,
             LocalDate endDate)

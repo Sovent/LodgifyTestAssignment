@@ -11,7 +11,7 @@ namespace VacationRental.Application
         
         public int CreateRental(CreateRentalCommand command)
         {
-            var rental = new Rental(command.Units);
+            var rental = new Rental(command.Units, command.PreparationPeriod);
             _rentalRepository.Save(rental);
 
             return rental.Id;

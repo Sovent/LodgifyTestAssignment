@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace VacationRental.Domain
 {
     public interface IRentalRepository
