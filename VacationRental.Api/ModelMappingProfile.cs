@@ -14,7 +14,10 @@ namespace VacationRental.Api
                 .ForCtorParam(
                     "preparationPeriod",
                     options => options.MapFrom(model => Period.FromDays(model.PreparationTimeInDays)));
-            CreateMap<Rental, RentalViewModel>();
+            CreateMap<Rental, RentalViewModel>()
+                .ForMember(
+                    model => model.PreparationTimeInDays, 
+                    options => options.MapFrom(entity => entity.PreparationPeriod.Days));
             CreateMap<BookingBindingModel, PlaceBookingCommand>()
                 .ForCtorParam(
                     "startDate",
