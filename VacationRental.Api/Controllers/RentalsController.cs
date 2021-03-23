@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 using VacationRental.Api.Models;
 using VacationRental.Application;
 
@@ -34,6 +35,14 @@ namespace VacationRental.Api.Controllers
             var newRentalId = _rentalService.CreateRental(command);
             var viewModel = new ResourceIdViewModel { Id = newRentalId };
             return viewModel;
+        }
+
+        [HttpPut]
+        [Route("{rentalId:int}")]
+        public void Put(int rentalId, RentalBindingModel model)
+        {
+            var command = new ChangeRentalCommand(rentalId, model.Units, Period.FromDays(model.PreparationTimeInDays));
+            _rentalService.ChangeRental(command);
         }
     }
 }

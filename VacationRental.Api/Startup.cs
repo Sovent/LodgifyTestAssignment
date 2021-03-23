@@ -42,6 +42,7 @@ namespace VacationRental.Api
             services.AddSingleton<IRentalAvailabilityCalculator, RentalAvailabilityCalculator>();
             services.AddSingleton<IBookingService, BookingService>();
             services.AddSingleton<IPreparationScheduler, PreparationScheduler>();
+            services.AddSingleton<IRentalChangeProcessor, RentalChangeProcessor>();
 
             services.AddAutoMapper(configuration => { }, typeof(ModelMappingProfile));
         }

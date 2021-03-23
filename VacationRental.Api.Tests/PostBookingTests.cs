@@ -6,6 +6,7 @@ using VacationRental.Api.Models;
 using VacationRental.Common;
 using VacationRental.Domain;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace VacationRental.Api.Tests
 {
@@ -27,13 +28,7 @@ namespace VacationRental.Api.Tests
                 Units = 4
             };
 
-            ResourceIdViewModel postRentalResult;
-            using (var postRentalResponse = await _client.PostAsJsonAsync($"/api/v1/rentals", postRentalRequest))
-            {
-                Assert.True(postRentalResponse.IsSuccessStatusCode);
-                postRentalResult = await postRentalResponse.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
-
+            var postRentalResult = await _client.CreateRentalAndAssertSuccess(postRentalRequest);
             var postBookingRequest = new BookingBindingModel
             {
                  RentalId = postRentalResult.Id,
@@ -41,12 +36,7 @@ namespace VacationRental.Api.Tests
                  Start = new DateTime(2001, 01, 01)
             };
 
-            ResourceIdViewModel postBookingResult;
-            using (var postBookingResponse = await _client.PostAsJsonAsync($"/api/v1/bookings", postBookingRequest))
-            {
-                Assert.True(postBookingResponse.IsSuccessStatusCode);
-                postBookingResult = await postBookingResponse.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
+            var postBookingResult = await _client.CreateBookingAndAssertSuccess(postBookingRequest);
 
             using (var getBookingResponse = await _client.GetAsync($"/api/v1/bookings/{postBookingResult.Id}"))
             {
@@ -67,12 +57,7 @@ namespace VacationRental.Api.Tests
                 Units = 1
             };
 
-            ResourceIdViewModel postRentalResult;
-            using (var postRentalResponse = await _client.PostAsJsonAsync($"/api/v1/rentals", postRentalRequest))
-            {
-                Assert.True(postRentalResponse.IsSuccessStatusCode);
-                postRentalResult = await postRentalResponse.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
+            var postRentalResult = await _client.CreateRentalAndAssertSuccess(postRentalRequest);
 
             var postBooking1Request = new BookingBindingModel
             {
@@ -81,10 +66,7 @@ namespace VacationRental.Api.Tests
                 Start = new DateTime(2002, 01, 01)
             };
 
-            using (var postBooking1Response = await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking1Request))
-            {
-                Assert.True(postBooking1Response.IsSuccessStatusCode);
-            }
+            await _client.CreateBookingAndAssertSuccess(postBooking1Request);
 
             var postBooking2Request = new BookingBindingModel
             {
@@ -93,12 +75,10 @@ namespace VacationRental.Api.Tests
                 Start = new DateTime(2002, 01, 02)
             };
 
-            await Assert.ThrowsAsync<DomainException<RentalIsUnavailable>>(async () =>
+            using (var response = await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking2Request))
             {
-                using (await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking2Request))
-                {
-                }
-            });
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            }
         }
     }
 }

@@ -15,6 +15,12 @@ namespace VacationRental.Infrastructure
         // note: int id means sequential id generation typical for relational databases
         protected void Save(T entity)
         {
+            if (entity.Id != default)
+            {
+                _entities[entity.Id] = entity;
+                return;
+            }
+            
             var newId = _entities.Any() ? _entities.Keys.Max() + 1 : 1;
             _entities[newId] = entity;
             _idProperty.SetValue(entity, newId);
@@ -23,6 +29,11 @@ namespace VacationRental.Infrastructure
         protected IEnumerable<T> GetAll()
         {
             return _entities.Values;
+        }
+
+        protected void Remove(int id)
+        {
+            _entities.Remove(id);
         }
         
         private readonly PropertyInfo _idProperty = typeof(T).GetProperty(nameof(IEntity.Id));

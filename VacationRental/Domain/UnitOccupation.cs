@@ -14,6 +14,12 @@ namespace VacationRental.Domain
             UnitNumber = unitNumber;
             RentalId = rentalId;
         }
+        
+        protected UnitOccupation(int id, int rentalId, LocalDate startDate, int nights, int unitNumber) 
+            : this(rentalId, startDate, nights, unitNumber)
+        {
+            Id = id;
+        }
 
         public int Id { get; private set; }
         

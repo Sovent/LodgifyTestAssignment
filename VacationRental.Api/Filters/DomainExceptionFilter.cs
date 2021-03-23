@@ -32,6 +32,15 @@ namespace VacationRental.Api.Filters
                 case DomainException<RentalNotFound> exception:
                     SetResult(exception, HttpStatusCode.NotFound);
                     break;
+                case DomainException<BookingNotFound> exception:
+                    SetResult(exception, HttpStatusCode.NotFound);
+                    break;
+                case DomainException<RentalIsUnavailable> exception:
+                    SetResult(exception, HttpStatusCode.BadRequest);
+                    break;
+                case DomainException<RentalChangeFailed> exception:
+                    SetResult(exception, HttpStatusCode.BadRequest);
+                    break;
             }
         }
     }

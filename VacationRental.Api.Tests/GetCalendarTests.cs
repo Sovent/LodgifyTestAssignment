@@ -26,12 +26,7 @@ namespace VacationRental.Api.Tests
                 PreparationTimeInDays = 1
             };
 
-            ResourceIdViewModel postRentalResult;
-            using (var postRentalResponse = await _client.PostAsJsonAsync($"/api/v1/rentals", postRentalRequest))
-            {
-                Assert.True(postRentalResponse.IsSuccessStatusCode);
-                postRentalResult = await postRentalResponse.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
+            var postRentalResult = await _client.CreateRentalAndAssertSuccess(postRentalRequest);
 
             var postBooking1Request = new BookingBindingModel
             {
@@ -40,12 +35,7 @@ namespace VacationRental.Api.Tests
                 Start = new DateTime(2000, 01, 02)
             };
 
-            ResourceIdViewModel postBooking1Result;
-            using (var postBooking1Response = await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking1Request))
-            {
-                Assert.True(postBooking1Response.IsSuccessStatusCode);
-                postBooking1Result = await postBooking1Response.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
+            var postBooking1Result = await _client.CreateBookingAndAssertSuccess(postBooking1Request);
 
             var postBooking2Request = new BookingBindingModel
             {
@@ -54,12 +44,7 @@ namespace VacationRental.Api.Tests
                 Start = new DateTime(2000, 01, 03)
             };
 
-            ResourceIdViewModel postBooking2Result;
-            using (var postBooking2Response = await _client.PostAsJsonAsync($"/api/v1/bookings", postBooking2Request))
-            {
-                Assert.True(postBooking2Response.IsSuccessStatusCode);
-                postBooking2Result = await postBooking2Response.Content.ReadAsAsync<ResourceIdViewModel>();
-            }
+            var postBooking2Result = await _client.CreateBookingAndAssertSuccess(postBooking2Request);
 
             using (var getCalendarResponse =
                 await _client.GetAsync($"/api/v1/calendar?rentalId={postRentalResult.Id}&start=2000-01-01&nights=5"))

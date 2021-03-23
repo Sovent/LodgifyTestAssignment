@@ -7,5 +7,7 @@ namespace VacationRental.Application
         int CreateRental(CreateRentalCommand command);
 
         Rental GetRental(GetRentalQuery query);
+
+        void ChangeRental(ChangeRentalCommand command);
     }
 }

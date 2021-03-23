@@ -9,5 +9,7 @@ namespace VacationRental.Domain
         IEnumerable<UnitOccupation> GetForRental(int rentalId);
 
         void Save(UnitOccupation occupation);
+
+        void Remove(int occupationId);
     }
 }
